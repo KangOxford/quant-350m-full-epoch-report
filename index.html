@@ -12,9 +12,16 @@ h1 { font-size: 26px; margin-bottom: 4px; }
 .metrics b { display: block; font-size: 12px; color: #5b6770; margin-bottom: 5px; }
 .metrics span { font-size: 18px; }
 img { max-width: 100%; border: 1px solid #d7dee5; }
+.figure { margin: 22px 0 26px; }
+.figure h2 { font-size: 18px; margin: 0 0 8px; }
+.chart-frame { border: 1px solid #d7dee5; padding: 10px; max-width: 100%; background: #ffffff; }
+#log-x-loss-chart { display: block; width: 100%; height: auto; min-height: 320px; }
+.chart-message { margin: 8px 0 0; color: #5b6770; font-size: 12px; }
 table { border-collapse: collapse; width: 100%; font-size: 12px; margin-top: 14px; }
 th, td { border: 1px solid #d7dee5; padding: 6px 7px; text-align: right; }
 th { background: #edf2f7; position: sticky; top: 0; }
+tr.row-crashed td { position: relative; color: #8f1d1d; background: #fff6f6; }
+tr.row-crashed td::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 2px solid #991b1b; pointer-events: none; }
 td:nth-child(1), td:nth-child(2), td:nth-child(3), td:nth-child(4), td:nth-child(5), th:nth-child(1), th:nth-child(2), th:nth-child(3), th:nth-child(4), th:nth-child(5) { text-align: left; }
 .links a { margin-right: 16px; }
 code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; }
@@ -29,9 +36,20 @@ code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; }
   <a href="stitched_loss_history.csv">stitched_loss_history.csv</a>
   <a href="summary.json">summary.json</a>
 </p>
-<img src="350m_full_epoch_chain.png" alt="350M full-epoch chain plot">
+<div class="figure">
+  <h2>Linear x-axis</h2>
+  <img src="350m_full_epoch_chain.png" alt="350M full-epoch chain plot">
+</div>
+<div class="figure">
+  <h2>Log x-axis</h2>
+  <p class="subtle">Same run histories and cleaned stitched chain, with global training step on a log scale.</p>
+  <div class="chart-frame">
+    <svg id="log-x-loss-chart" role="img" aria-label="350M full-epoch chain with log-scaled x axis"></svg>
+    <p class="chart-message" id="log-x-chart-status">Loading log x-axis chart...</p>
+  </div>
+</div>
 <h2>Jobs</h2>
-<table><thead><tr><th>job_id</th><th>role</th><th>run_id</th><th>wandb_state</th><th>slurm_state</th><th>time_limit</th><th>rows</th><th>min_step</th><th>max_step</th><th>min_loss</th><th>max_loss</th><th>restore_step</th><th>resume_from_step</th><th>latest_checkpoint_step</th><th>submitted_next</th></tr></thead><tbody><tr><td>4523773</td><td>primary</td><td>tzcobly9</td><td>crashed</td><td>FAILED</td><td>06:00:00</td><td>152</td><td>10</td><td>16610</td><td>0.555721</td><td>7.780694</td><td></td><td></td><td></td><td></td></tr><tr><td>4532053</td><td>primary</td><td>4kybwa4a</td><td>finished</td><td>COMPLETED</td><td>06:00:00</td><td>276</td><td>15080</td><td>44560</td><td>0.514558</td><td>0.661635</td><td></td><td>15070</td><td>44560</td><td>4535368</td></tr><tr><td>4535368</td><td>primary</td><td>bcayb0hh</td><td>finished</td><td>COMPLETED</td><td>09:00:00</td><td>278</td><td>44570</td><td>68870</td><td>0.4899</td><td>0.630743</td><td></td><td>44560</td><td>68870</td><td>4538470</td></tr><tr><td>4538470</td><td>attempt</td><td>87udtbe4</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>68880</td><td>69160</td><td>0.53325</td><td>0.576034</td><td></td><td>68870</td><td>68870</td><td>4538716</td></tr><tr><td>4538716</td><td>attempt</td><td>qi3vuzfr</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>3</td><td>68880</td><td>69070</td><td>0.533096</td><td>0.561058</td><td></td><td>68870</td><td>68870</td><td>4538985</td></tr><tr><td>4538985</td><td>attempt</td><td>dwp0n5h2</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>68880</td><td>69180</td><td>0.533263</td><td>0.58105</td><td></td><td>68870</td><td>68870</td><td>4539329</td></tr><tr><td>4539329</td><td>attempt</td><td>doekqiq4</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>68880</td><td>69170</td><td>0.532691</td><td>0.580937</td><td></td><td>68870</td><td>68870</td><td>4539624</td></tr><tr><td>4539624</td><td>attempt</td><td>1puubh2r</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>68880</td><td>69180</td><td>0.533065</td><td>0.580476</td><td></td><td>68870</td><td>68870</td><td>4539988</td></tr><tr><td>4539988</td><td>primary</td><td>1e5wz772</td><td>finished</td><td>COMPLETED</td><td>09:00:00</td><td>278</td><td>68880</td><td>93470</td><td>0.494777</td><td>0.60179</td><td></td><td>68870</td><td>93470</td><td>4544776</td></tr><tr><td>4544776</td><td>primary</td><td>6rx93808</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>93480</td><td>93780</td><td>0.525987</td><td>0.564098</td><td></td><td>93470</td><td>93470</td><td>4545392</td></tr><tr><td>4545392</td><td>primary</td><td>8drsgc25</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>93480</td><td>93770</td><td>0.523482</td><td>0.553176</td><td></td><td>93470</td><td>93470</td><td>4546050</td></tr><tr><td>4546050</td><td>primary</td><td>39c5tia4</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>93480</td><td>93780</td><td>0.526045</td><td>0.56432</td><td></td><td>93470</td><td>93470</td><td>4546625</td></tr><tr><td>4546625</td><td>primary</td><td>ng17ypbj</td><td>running</td><td>RUNNING</td><td>09:00:00</td><td>114</td><td>93480</td><td>103690</td><td>0.482382</td><td>0.667774</td><td></td><td>93470</td><td></td><td></td></tr></tbody></table>
+<table><thead><tr><th>job_id</th><th>role</th><th>run_id</th><th>wandb_state</th><th>slurm_state</th><th>time_limit</th><th>rows</th><th>min_step</th><th>max_step</th><th>min_loss</th><th>max_loss</th><th>restore_step</th><th>resume_from_step</th><th>latest_checkpoint_step</th><th>submitted_next</th></tr></thead><tbody><tr class="row-crashed"><td>4523773</td><td>primary</td><td>tzcobly9</td><td>crashed</td><td>FAILED</td><td>06:00:00</td><td>152</td><td>10</td><td>16610</td><td>0.555721</td><td>7.780694</td><td></td><td></td><td></td><td></td></tr><tr><td>4532053</td><td>primary</td><td>4kybwa4a</td><td>finished</td><td>COMPLETED</td><td>06:00:00</td><td>276</td><td>15080</td><td>44560</td><td>0.514558</td><td>0.661635</td><td></td><td>15070</td><td>44560</td><td>4535368</td></tr><tr><td>4535368</td><td>primary</td><td>bcayb0hh</td><td>finished</td><td>COMPLETED</td><td>09:00:00</td><td>278</td><td>44570</td><td>68870</td><td>0.4899</td><td>0.630743</td><td></td><td>44560</td><td>68870</td><td>4538470</td></tr><tr class="row-crashed"><td>4538470</td><td>attempt</td><td>87udtbe4</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>68880</td><td>69160</td><td>0.53325</td><td>0.576034</td><td></td><td>68870</td><td>68870</td><td>4538716</td></tr><tr class="row-crashed"><td>4538716</td><td>attempt</td><td>qi3vuzfr</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>3</td><td>68880</td><td>69070</td><td>0.533096</td><td>0.561058</td><td></td><td>68870</td><td>68870</td><td>4538985</td></tr><tr class="row-crashed"><td>4538985</td><td>attempt</td><td>dwp0n5h2</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>68880</td><td>69180</td><td>0.533263</td><td>0.58105</td><td></td><td>68870</td><td>68870</td><td>4539329</td></tr><tr class="row-crashed"><td>4539329</td><td>attempt</td><td>doekqiq4</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>68880</td><td>69170</td><td>0.532691</td><td>0.580937</td><td></td><td>68870</td><td>68870</td><td>4539624</td></tr><tr class="row-crashed"><td>4539624</td><td>attempt</td><td>1puubh2r</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>68880</td><td>69180</td><td>0.533065</td><td>0.580476</td><td></td><td>68870</td><td>68870</td><td>4539988</td></tr><tr><td>4539988</td><td>primary</td><td>1e5wz772</td><td>finished</td><td>COMPLETED</td><td>09:00:00</td><td>278</td><td>68880</td><td>93470</td><td>0.494777</td><td>0.60179</td><td></td><td>68870</td><td>93470</td><td>4544776</td></tr><tr class="row-crashed"><td>4544776</td><td>primary</td><td>6rx93808</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>93480</td><td>93780</td><td>0.525987</td><td>0.564098</td><td></td><td>93470</td><td>93470</td><td>4545392</td></tr><tr class="row-crashed"><td>4545392</td><td>primary</td><td>8drsgc25</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>93480</td><td>93770</td><td>0.523482</td><td>0.553176</td><td></td><td>93470</td><td>93470</td><td>4546050</td></tr><tr class="row-crashed"><td>4546050</td><td>primary</td><td>39c5tia4</td><td>crashed</td><td>FAILED</td><td>09:00:00</td><td>4</td><td>93480</td><td>93780</td><td>0.526045</td><td>0.56432</td><td></td><td>93470</td><td>93470</td><td>4546625</td></tr><tr><td>4546625</td><td>primary</td><td>ng17ypbj</td><td>running</td><td>RUNNING</td><td>09:00:00</td><td>114</td><td>93480</td><td>103690</td><td>0.482382</td><td>0.667774</td><td></td><td>93470</td><td></td><td></td></tr></tbody></table>
 <script type="application/json" id="chain-summary">
 {
   &quot;generated_at_utc&quot;: &quot;20260511_181534_UTC&quot;,
@@ -610,5 +628,189 @@ code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; }
   &quot;total_steps&quot;: 2525167
 }
 </script>
+
+<script>
+(() => {
+  const allUrl = "all_run_loss_history.csv";
+  const stitchedUrl = "stitched_loss_history.csv";
+  const svg = document.getElementById("log-x-loss-chart");
+  const status = document.getElementById("log-x-chart-status");
+  if (!svg) return;
+
+  const width = 1100;
+  const height = 560;
+  const margin = { left: 76, right: 26, top: 30, bottom: 66 };
+  const plotWidth = width - margin.left - margin.right;
+  const plotHeight = height - margin.top - margin.bottom;
+  const ns = "http://www.w3.org/2000/svg";
+  const colors = [
+    "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+    "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf",
+    "#4c78a8", "#f58518", "#54a24b"
+  ];
+
+  function parseCsv(text) {
+    const lines = text.trim().split(/\r?\n/);
+    const headers = lines.shift().split(",");
+    return lines.filter(Boolean).map((line) => {
+      const values = line.split(",");
+      const row = {};
+      headers.forEach((header, idx) => {
+        row[header] = values[idx];
+      });
+      return row;
+    });
+  }
+
+  function numericRows(rows) {
+    return rows.map((row) => ({
+      global_step: Number(row.global_step),
+      step_loss: Number(row.step_loss),
+      smooth_loss: Number(row.smooth_loss),
+      job_id: row.job_id || "",
+      role: row.role || ""
+    })).filter((row) => (
+      Number.isFinite(row.global_step) &&
+      row.global_step > 0 &&
+      Number.isFinite(row.step_loss) &&
+      row.step_loss > 0
+    ));
+  }
+
+  function ewm(rows, alpha = 0.035) {
+    let prev = null;
+    return rows.map((row) => {
+      const smooth = prev === null ? row.step_loss : alpha * row.step_loss + (1 - alpha) * prev;
+      prev = smooth;
+      return { ...row, smooth_loss: smooth };
+    });
+  }
+
+  function log10(value) {
+    return Math.log(value) / Math.LN10;
+  }
+
+  function make(tag, attrs = {}, text = "") {
+    const el = document.createElementNS(ns, tag);
+    Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
+    if (text) el.textContent = text;
+    return el;
+  }
+
+  function pathFor(rows, xScale, yScale) {
+    return rows.map((row, idx) => {
+      const prefix = idx === 0 ? "M" : "L";
+      return `${prefix}${xScale(row.global_step).toFixed(2)},${yScale(row.smooth_loss).toFixed(2)}`;
+    }).join(" ");
+  }
+
+  function formatStep(value) {
+    if (value >= 1000000) return `${value / 1000000}M`;
+    if (value >= 1000) return `${value / 1000}k`;
+    return String(value);
+  }
+
+  function render(allRowsRaw, stitchedRowsRaw) {
+    const allRows = numericRows(allRowsRaw);
+    const stitchedRows = numericRows(stitchedRowsRaw).filter((row) => Number.isFinite(row.smooth_loss));
+    const byJob = new Map();
+    allRows.forEach((row) => {
+      if (!byJob.has(row.job_id)) byJob.set(row.job_id, []);
+      byJob.get(row.job_id).push(row);
+    });
+    const jobSeries = Array.from(byJob.entries()).map(([jobId, rows]) => ({
+      jobId,
+      role: rows[0]?.role || "",
+      rows: ewm(rows.slice().sort((a, b) => a.global_step - b.global_step))
+    }));
+    const allSmoothRows = jobSeries.flatMap((series) => series.rows).concat(stitchedRows);
+    if (allSmoothRows.length === 0) {
+      status.textContent = "No rows available for log x-axis chart.";
+      return;
+    }
+
+    const xMin = Math.max(1, Math.min(...allSmoothRows.map((row) => row.global_step)));
+    const xMax = Math.max(...allSmoothRows.map((row) => row.global_step));
+    const yMin = Math.min(...allSmoothRows.map((row) => row.smooth_loss));
+    const yMax = Math.max(...allSmoothRows.map((row) => row.smooth_loss));
+    const xLogMin = log10(xMin);
+    const xLogMax = log10(xMax);
+    const yLogMin = log10(yMin * 0.96);
+    const yLogMax = log10(yMax * 1.05);
+    const xScale = (value) => margin.left + ((log10(value) - xLogMin) / (xLogMax - xLogMin)) * plotWidth;
+    const yScale = (value) => margin.top + (1 - ((log10(value) - yLogMin) / (yLogMax - yLogMin))) * plotHeight;
+
+    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    svg.replaceChildren();
+    svg.appendChild(make("rect", { x: 0, y: 0, width, height, fill: "#ffffff" }));
+
+    const xTicks = [10, 100, 1000, 10000, 100000].filter((tick) => tick >= xMin && tick <= xMax);
+    const yTicks = [0.5, 0.6, 0.8, 1, 2, 4, 8].filter((tick) => tick >= yMin * 0.96 && tick <= yMax * 1.05);
+    xTicks.forEach((tick) => {
+      const x = xScale(tick);
+      svg.appendChild(make("line", { x1: x, y1: margin.top, x2: x, y2: margin.top + plotHeight, stroke: "#d7dee5", "stroke-width": 1 }));
+      svg.appendChild(make("text", { x, y: height - 28, "text-anchor": "middle", fill: "#46515c", "font-size": 12 }, formatStep(tick)));
+    });
+    yTicks.forEach((tick) => {
+      const y = yScale(tick);
+      svg.appendChild(make("line", { x1: margin.left, y1: y, x2: margin.left + plotWidth, y2: y, stroke: "#d7dee5", "stroke-width": 1 }));
+      svg.appendChild(make("text", { x: margin.left - 10, y: y + 4, "text-anchor": "end", fill: "#46515c", "font-size": 12 }, String(tick)));
+    });
+
+    svg.appendChild(make("line", { x1: margin.left, y1: margin.top + plotHeight, x2: margin.left + plotWidth, y2: margin.top + plotHeight, stroke: "#17202a", "stroke-width": 1.2 }));
+    svg.appendChild(make("line", { x1: margin.left, y1: margin.top, x2: margin.left, y2: margin.top + plotHeight, stroke: "#17202a", "stroke-width": 1.2 }));
+
+    jobSeries.forEach((series, idx) => {
+      if (series.rows.length < 2) return;
+      const isPrimary = series.role === "primary";
+      svg.appendChild(make("path", {
+        d: pathFor(series.rows, xScale, yScale),
+        fill: "none",
+        stroke: colors[idx % colors.length],
+        "stroke-width": isPrimary ? 1.5 : 0.9,
+        opacity: isPrimary ? 0.48 : 0.22
+      }));
+    });
+
+    if (stitchedRows.length > 1) {
+      svg.appendChild(make("path", {
+        d: pathFor(stitchedRows, xScale, yScale),
+        fill: "none",
+        stroke: "#000000",
+        "stroke-width": 3.1,
+        "stroke-linejoin": "round",
+        "stroke-linecap": "round"
+      }));
+      const latest = stitchedRows[stitchedRows.length - 1];
+      const latestX = xScale(latest.global_step);
+      const latestY = yScale(latest.smooth_loss);
+      svg.appendChild(make("circle", { cx: latestX, cy: latestY, r: 5.5, fill: "#d62728" }));
+      svg.appendChild(make("text", { x: latestX - 10, y: latestY - 14, "text-anchor": "end", fill: "#7f1d1d", "font-size": 12 }, `latest ${Math.round(latest.global_step).toLocaleString()} / EMA ${latest.smooth_loss.toFixed(4)}`));
+    }
+
+    svg.appendChild(make("text", { x: width / 2, y: height - 8, "text-anchor": "middle", fill: "#17202a", "font-size": 14 }, "Global training step, log scale"));
+    const yLabel = make("text", { x: 18, y: height / 2, "text-anchor": "middle", fill: "#17202a", "font-size": 14, transform: `rotate(-90 18 ${height / 2})` }, "step_loss EMA, log scale");
+    svg.appendChild(yLabel);
+    svg.appendChild(make("text", { x: margin.left, y: 18, fill: "#17202a", "font-size": 16, "font-weight": 600 }, "350M full-epoch chain, log x-axis view"));
+    status.textContent = "";
+  }
+
+  Promise.all([
+    fetch(allUrl).then((response) => {
+      if (!response.ok) throw new Error(`${allUrl}: ${response.status}`);
+      return response.text();
+    }),
+    fetch(stitchedUrl).then((response) => {
+      if (!response.ok) throw new Error(`${stitchedUrl}: ${response.status}`);
+      return response.text();
+    })
+  ]).then(([allText, stitchedText]) => {
+    render(parseCsv(allText), parseCsv(stitchedText));
+  }).catch((error) => {
+    status.textContent = `Could not render log x-axis chart: ${error.message}`;
+  });
+})();
+</script>
+
 </body>
 </html>
