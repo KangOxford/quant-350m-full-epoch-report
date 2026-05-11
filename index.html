@@ -711,6 +711,23 @@ code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; }
     return String(value);
   }
 
+  function logTicks(minValue, maxValue) {
+    const ticks = [];
+    const multipliers = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5, 7, 10];
+    const minPower = Math.floor(log10(minValue));
+    const maxPower = Math.ceil(log10(maxValue));
+    for (let power = minPower; power <= maxPower; power += 1) {
+      const base = 10 ** power;
+      multipliers.forEach((multiplier) => {
+        const tick = multiplier * base;
+        if (tick >= minValue && tick <= maxValue) {
+          ticks.push(tick);
+        }
+      });
+    }
+    return [...new Set(ticks)].sort((a, b) => a - b);
+  }
+
   function render(allRowsRaw, stitchedRowsRaw) {
     const allRows = numericRows(allRowsRaw);
     const stitchedRows = numericRows(stitchedRowsRaw).filter((row) => (
@@ -748,7 +765,7 @@ code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; }
     svg.replaceChildren();
     svg.appendChild(make("rect", { x: 0, y: 0, width, height, fill: "#ffffff" }));
 
-    const xTicks = [10, 100, 1000, 10000, 100000].filter((tick) => tick >= xMin && tick <= xMax);
+    const xTicks = logTicks(xMin, xMax);
     const yTicks = [0.45, 0.5, 0.6, 0.8, 1].filter((tick) => tick >= yMin * 0.96 && tick <= lossCutoff);
     xTicks.forEach((tick) => {
       const x = xScale(tick);
