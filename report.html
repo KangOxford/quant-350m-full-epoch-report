@@ -42,7 +42,7 @@ code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; }
 </div>
 <div class="figure">
   <h2>Log x-axis</h2>
-  <p class="subtle">Same run histories and cleaned stitched chain, with global training step on a log scale.</p>
+  <p class="subtle">Same run histories and cleaned stitched chain, truncated to plotted EMA loss &lt; 1 with global training step on a log scale.</p>
   <div class="chart-frame">
     <svg id="log-x-loss-chart" role="img" aria-label="350M full-epoch chain with log-scaled x axis"></svg>
     <p class="chart-message" id="log-x-chart-status">Loading log x-axis chart...</p>
@@ -642,6 +642,7 @@ code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; }
   const margin = { left: 76, right: 26, top: 30, bottom: 66 };
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
+  const lossCutoff = 1.0;
   const ns = "http://www.w3.org/2000/svg";
   const colors = [
     "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
@@ -712,7 +713,9 @@ code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; }
 
   function render(allRowsRaw, stitchedRowsRaw) {
     const allRows = numericRows(allRowsRaw);
-    const stitchedRows = numericRows(stitchedRowsRaw).filter((row) => Number.isFinite(row.smooth_loss));
+    const stitchedRows = numericRows(stitchedRowsRaw).filter((row) => (
+      Number.isFinite(row.smooth_loss) && row.smooth_loss < lossCutoff
+    ));
     const byJob = new Map();
     allRows.forEach((row) => {
       if (!byJob.has(row.job_id)) byJob.set(row.job_id, []);
@@ -722,10 +725,11 @@ code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; }
       jobId,
       role: rows[0]?.role || "",
       rows: ewm(rows.slice().sort((a, b) => a.global_step - b.global_step))
-    }));
+        .filter((row) => Number.isFinite(row.smooth_loss) && row.smooth_loss < lossCutoff)
+    })).filter((series) => series.rows.length > 0);
     const allSmoothRows = jobSeries.flatMap((series) => series.rows).concat(stitchedRows);
     if (allSmoothRows.length === 0) {
-      status.textContent = "No rows available for log x-axis chart.";
+      status.textContent = "No rows available below loss 1 for log x-axis chart.";
       return;
     }
 
@@ -736,7 +740,7 @@ code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; }
     const xLogMin = log10(xMin);
     const xLogMax = log10(xMax);
     const yLogMin = log10(yMin * 0.96);
-    const yLogMax = log10(yMax * 1.05);
+    const yLogMax = log10(Math.min(lossCutoff, yMax * 1.05));
     const xScale = (value) => margin.left + ((log10(value) - xLogMin) / (xLogMax - xLogMin)) * plotWidth;
     const yScale = (value) => margin.top + (1 - ((log10(value) - yLogMin) / (yLogMax - yLogMin))) * plotHeight;
 
@@ -745,7 +749,7 @@ code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; }
     svg.appendChild(make("rect", { x: 0, y: 0, width, height, fill: "#ffffff" }));
 
     const xTicks = [10, 100, 1000, 10000, 100000].filter((tick) => tick >= xMin && tick <= xMax);
-    const yTicks = [0.5, 0.6, 0.8, 1, 2, 4, 8].filter((tick) => tick >= yMin * 0.96 && tick <= yMax * 1.05);
+    const yTicks = [0.45, 0.5, 0.6, 0.8, 1].filter((tick) => tick >= yMin * 0.96 && tick <= lossCutoff);
     xTicks.forEach((tick) => {
       const x = xScale(tick);
       svg.appendChild(make("line", { x1: x, y1: margin.top, x2: x, y2: margin.top + plotHeight, stroke: "#d7dee5", "stroke-width": 1 }));
@@ -791,7 +795,7 @@ code { background: #edf2f7; padding: 1px 4px; border-radius: 3px; }
     svg.appendChild(make("text", { x: width / 2, y: height - 8, "text-anchor": "middle", fill: "#17202a", "font-size": 14 }, "Global training step, log scale"));
     const yLabel = make("text", { x: 18, y: height / 2, "text-anchor": "middle", fill: "#17202a", "font-size": 14, transform: `rotate(-90 18 ${height / 2})` }, "step_loss EMA, log scale");
     svg.appendChild(yLabel);
-    svg.appendChild(make("text", { x: margin.left, y: 18, fill: "#17202a", "font-size": 16, "font-weight": 600 }, "350M full-epoch chain, log x-axis view"));
+    svg.appendChild(make("text", { x: margin.left, y: 18, fill: "#17202a", "font-size": 16, "font-weight": 600 }, "350M full-epoch chain, log x-axis view (EMA loss < 1)"));
     status.textContent = "";
   }
 
